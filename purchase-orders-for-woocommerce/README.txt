@@ -3,12 +3,12 @@ Contributors: mcgregormedia
 Tags: WooCommerce, payment gateway, purchase order
 Donate link: https://paypal.me/mcgregormedia
 Requires at least: 4.8
-Tested up to: 6.6
-Stable tag: 1.11.1
+Tested up to: 6.8
+Stable tag: 1.12.2
 Requires PHP: 7.4
 Requires plugin: woocommerce
 WC requires at least: 3.0
-WC tested up to: 9.3
+WC tested up to: 10.3
 License: GNU General Public License v2.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,7 +23,7 @@ The purchase order details will be displayed in the admin order screen, the cust
 
 = WooCommerce compatibility =
 
-This plugin is compatible with WooCommerce 3.x, 4.x, 5.x, 6.x, 7.x, 8.x and 9.x versions.
+This plugin is compatible with WooCommerce 3.x, 4.x, 5.x, 6.x, 7.x, 8.x, 9.x and 10.x versions.
 
 = HPOS compatibility =
 
@@ -53,7 +53,7 @@ Select the order status to apply to the order to when a customer checks out usin
 
 = Custom fields =
 
-You can add your own fields to the checkout form by adding custom HTML to the action hook in the PO checkout form:
+You can add your own fields to the frontend checkout form by adding custom HTML to the action hook in the PO checkout form:
 
 pofwc_form_after_po_form
 
@@ -118,6 +118,10 @@ This code all goes in your functions.php file in your child theme - don't place 
 
 This plugin will gather and store a company's name, address and/or email address. This could also be construed as an individual's personal data. However, as the user has opted to pay by this method, it is suggested that the lawful basis for processing this data is contractual necessity. Processing is necessary in order to send the invoice to the user or user's representative. This data is stored as standard postmeta data and will be retained until the order is permanently deleted (not trashed).
 
+= Roadmap =
+
+The ability to add and edit purchase order data in the Add/Edit Order screen was introduced in version 1.12.0 but due to it causing fatal errors on some users' sites, it was removed in version 1.12.2. It is still in the roadmap to add, as is compatibility with the Gutemnberg checkout block. No timeline exists for this as yet however.
+
 == Screenshots ==
 1. The admin settings for the gateway.
 2. Checkout page on Storefront theme.
@@ -126,18 +130,30 @@ This plugin will gather and store a company's name, address and/or email address
 Install as usual by going to Plugins > Add New and searching for Purchase Orders for WooCommerce or download the plugin file and upload to your-site.com/wp-content/plugins.
 
 == Changelog ==
+1.12.2 11-11-2025
+REMOVED: Add/edit PO data in the Add Order/Edit Order screens due to fatal errors
+
+1.12.1 10-11-2025
+ADDED: Conditional so PO data is only displayed/editable if order payment method is PO
+ADDED: Conditional to $order->update_meta_data is only called if order payment method is PO
+
+1.12.0 08-11-2025
+ADDED: Add/edit PO data in the Add Order/Edit Order screens
+UPDATED: Compatibility with WordPress 6.8
+UPDATED: Compatibility with WooCommerce 10.3
+
 1.11.1 27-09-2024
-TWEAK: format readme code text
+TWEAK: Format readme code text
 
 1.11.0 27-09-2024
-ADDED: action hooks in PO checkout form, thank you page, order history and admin Edit Order screen
+ADDED: Action hooks in PO checkout form, thank you page, order history and admin Edit Order screen
 UPDATED: Compatibility with WooCommerce 9.3
 
 1.10.1 23-05-2024
 FIXED: PHP notice "Function is_internal_meta_key was called incorrectly"
-FIXED: deprecated dynamic properties for PHP 8.2
-FIXED: errors in fr-CA translation
-CHECKED: reported issues with order emails not sending. Could not replicate issue.
+FIXED: Deprecated dynamic properties for PHP 8.2
+FIXED: Errors in fr-CA translation
+CHECKED: Reported issues with order emails not sending. Could not replicate issue.
 
 1.10.0 19-05-2024
 FIXED: Missing translation strings

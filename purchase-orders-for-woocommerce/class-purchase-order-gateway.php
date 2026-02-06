@@ -744,43 +744,49 @@ function pofwc_purchase_order_gateway_init() {
 			 * @since 1.10.0		Fixed missing translation strings
 			 * @since 1.11.0		Fixed PHP warning "Notice: Function is_internal_meta_key was called incorrectly"
 			 * @since 1.11.0		Added action hooks
+			 * @since 1.12.0		Added functionality to add/edit PO data in the Add/Edit Order screen
+			 * @since 1.12.1		Added conditional so PO data is only displayed/editable if order payment method is PO
+			 * @since 1.12.2		Removed functionality to add/edit PO data in the Add/Edit Order screen
 			 */
 			
-			public function pofwc_display_purchase_order_meta(){
+			public function pofwc_display_purchase_order_meta( $order ){
+
+				$purchase_order_number = $order->get_meta('_purchase_order_number', true );
 				
-				$order = wc_get_order( get_the_ID() );
+				if ( '' != $purchase_order_number ) {
+
+					echo '<div class="address">';
+			
+						echo '<h3>' . __( 'Purchase order information', 'pofwc' ) . '</h3>';
+
+						echo '<p>';
+							echo '<strong>' . __( 'Purchase order number:', 'pofwc' ) . '</strong> ' . esc_html( $purchase_order_number ) . '<br>';
+
+							echo '<strong>' . __( 'Invoice details:', 'pofwc' ) . '</strong> <br>';
+							echo ( $order->get_meta('_purchase_order_company_name', true ) ) ? esc_html( $order->get_meta('_purchase_order_company_name', true ) ) . '<br>' : '';
+
+							echo ( $order->get_meta('_purchase_order_address1', true ) ) ? esc_html( $order->get_meta('_purchase_order_address1', true ) ) . '<br>' : '';
+
+							echo ( $order->get_meta('_purchase_order_address2', true ) ) ? esc_html( $order->get_meta('_purchase_order_address2', true ) ) . '<br>' : '';
+
+							echo ( $order->get_meta('_purchase_order_address3', true ) ) ? esc_html( $order->get_meta('_purchase_order_address3', true ) ) . '<br>' : '';
+
+							echo ( $order->get_meta('_purchase_order_town', true ) ) ? esc_html( $order->get_meta('_purchase_order_town', true ) ) . '<br>' : '';
+
+							echo ( $order->get_meta('_purchase_order_county', true ) ) ? esc_html( $order->get_meta('_purchase_order_county', true ) ) . '<br>' : '';
+
+							do_action( 'pofwc_admin_display_after_po_county', $order );	
+
+							echo ( $order->get_meta('_purchase_order_postcode', true ) ) ? esc_html( $order->get_meta('_purchase_order_postcode', true ) ) . '<br>' : '';
+
+							echo ( $order->get_meta('_purchase_order_email', true ) ) ? esc_html( $order->get_meta('_purchase_order_email', true ) ) . '<br>' : '';
+
+							do_action( 'pofwc_admin_display_after_po_form', $order );
+						echo '</p>';
 				
-				if( $order->get_payment_method() == 'purchase_order_gateway' && $order->get_meta('_purchase_order_number', true ) ){
-		
-					echo '<h3>' . __( 'Purchase order information', 'pofwc' ) . '</h3>';
+					echo '</div>';
 
-					echo '<p>';
-						echo '<strong>' . __( 'Purchase order number:', 'pofwc' ) . '</strong> ' . $order->get_meta('_purchase_order_number', true ) . '<br>';
-
-						echo '<strong>' . __( 'Invoice details:', 'pofwc' ) . '</strong> <br>';
-						echo ( $order->get_meta('_purchase_order_company_name', true ) ) ? esc_html( $order->get_meta('_purchase_order_company_name', true ) ) . '<br>' : '';
-
-						echo ( $order->get_meta('_purchase_order_address1', true ) ) ? esc_html( $order->get_meta('_purchase_order_address1', true ) ) . '<br>' : '';
-
-						echo ( $order->get_meta('_purchase_order_address2', true ) ) ? esc_html( $order->get_meta('_purchase_order_address2', true ) ) . '<br>' : '';
-
-						echo ( $order->get_meta('_purchase_order_address3', true ) ) ? esc_html( $order->get_meta('_purchase_order_address3', true ) ) . '<br>' : '';
-
-						echo ( $order->get_meta('_purchase_order_town', true ) ) ? esc_html( $order->get_meta('_purchase_order_town', true ) ) . '<br>' : '';
-
-						echo ( $order->get_meta('_purchase_order_county', true ) ) ? esc_html( $order->get_meta('_purchase_order_county', true ) ) . '<br>' : '';
-
-						do_action( 'pofwc_admin_display_after_po_county', $order );	
-
-						echo ( $order->get_meta('_purchase_order_postcode', true ) ) ? esc_html( $order->get_meta('_purchase_order_postcode', true ) ) . '<br>' : '';
-
-						echo ( $order->get_meta('_purchase_order_email', true ) ) ? esc_html( $order->get_meta('_purchase_order_email', true ) ) . '<br>' : '';
-
-						do_action( 'pofwc_admin_display_after_po_form', $order );
-					echo '</p>';
-				
 				}
-				
 			}
 			
 
@@ -809,7 +815,7 @@ function pofwc_purchase_order_gateway_init() {
 				
 				if ( '' != $purchase_order_number ) {
 					
-					echo '<p><strong>' . __( 'Purchase Order number', 'pofwc' ) . ':</strong> ' . $purchase_order_number . '<br>';
+					echo '<p><strong>' . __( 'Purchase Order number', 'pofwc' ) . ':</strong> ' . esc_html( $purchase_order_number ) . '<br>';
 
 					echo ( $order->get_meta('_purchase_order_company_name', true ) ) ? esc_html( $order->get_meta('_purchase_order_company_name', true ) ) . '<br>' : '';
 
@@ -830,9 +836,6 @@ function pofwc_purchase_order_gateway_init() {
 					do_action( 'pofwc_thankyou_display_after_po_form', $order );
 					
 				}
-
-
-				
 			}			
 			
 
